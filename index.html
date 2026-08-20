@@ -65,7 +65,39 @@
     transition:width .25s ease;
   }
   .nav-links a:hover::after{ width:100%; }
-  @media (max-width:640px){ .nav-links{ gap:16px; } .nav-links span{ display:none; } }
+  @media (max-width:640px){ .nav-links span{ display:none; } }
+
+  .hamburger{
+    display:none; flex-direction:column; justify-content:center; align-items:flex-end; gap:5px;
+    width:32px; height:32px; background:none; border:none; cursor:pointer; padding:0; margin:0;
+  }
+  .hamburger span{
+    display:block; width:22px; height:2px; background:var(--text-dim); border-radius:1px;
+    transition:transform .25s ease, opacity .2s ease, background .2s ease, width .2s ease;
+  }
+  .hamburger:hover span{ background:var(--amber); }
+  .hamburger.is-open span:nth-child(1){ transform:translateY(7px) rotate(45deg); width:22px; }
+  .hamburger.is-open span:nth-child(2){ opacity:0; }
+  .hamburger.is-open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); width:22px; }
+
+  @media (max-width:720px){
+    .hamburger{ display:flex; }
+    .nav-links{
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:0;
+      background:rgba(14,17,22,0.97); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border);
+      max-height:0; overflow:hidden; opacity:0;
+      transition:max-height .32s ease, opacity .25s ease;
+      padding:0 28px;
+    }
+    .nav-links.is-open{ max-height:320px; opacity:1; padding:10px 28px 18px; }
+    .nav-links li{ width:100%; }
+    .nav-links a{ display:block; padding:14px 2px; border-bottom:1px solid var(--border); font-size:14px; }
+    .nav-links li:last-child a{ border-bottom:none; }
+    .nav-links a::after{ display:none; }
+    .nav-links span{ display:inline; color:var(--text-faint); }
+  }
 
   /* ---------- HERO ---------- */
   header.hero{
@@ -213,7 +245,10 @@
 <nav>
   <div class="wrap">
     <div class="nav-brand">James.C</div>
-    <ul class="nav-links">
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
       <li><a href="#about"><span>~/</span>about</a></li>
       <li><a href="#experience"><span>~/</span>experience</a></li>
       <li><a href="#projects"><span>~/</span>projects</a></li>
@@ -479,6 +514,46 @@
 </footer>
 
 <script>
+  // Mobile hamburger menu
+  (function(){
+    var btn = document.getElementById('hamburger');
+    var menu = document.getElementById('nav-links');
+    if(!btn || !menu) return;
+
+    function closeMenu(){
+      btn.classList.remove('is-open');
+      menu.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    function toggleMenu(){
+      var open = menu.classList.toggle('is-open');
+      btn.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', function(e){
+      if(!menu.classList.contains('is-open')) return;
+      if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
+    });
+
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeMenu();
+    });
+
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 720) closeMenu();
+    });
+  })();
+
   // In-page anchor navigation handled via JS (avoids native link navigation,
   // which some embedded/sandboxed viewers flag as "external" even for #anchors)
   (function(){
