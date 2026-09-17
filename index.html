@@ -214,6 +214,46 @@
   .commit-links a{ font-family:var(--mono); font-size:12.5px; color:var(--amber); border-bottom:1px solid transparent; }
   .commit-links a:hover{ border-color:var(--amber); }
 
+  /* ---------- DESIGNS (Figma showcase) ---------- */
+  .designs-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+  @media (max-width:640px){ .designs-grid{ grid-template-columns:1fr; } }
+
+  .figma-card{
+    display:block; border:1px solid var(--border); border-radius:12px; overflow:hidden;
+    background:var(--surface); transition:border-color .25s ease, transform .25s ease;
+  }
+  .figma-card:hover{ border-color:var(--amber-dim); transform:translateY(-3px); }
+
+  .figma-thumb{ position:relative; aspect-ratio:16/10; background:linear-gradient(160deg, var(--surface-2), var(--bg-alt)); overflow:hidden; }
+  .figma-grid{
+    position:absolute; inset:0; opacity:.35;
+    background-image:linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:22px 22px;
+  }
+  .frame{ position:absolute; border-radius:5px; border-width:1.5px; border-style:solid; background:rgba(255,255,255,0.025); }
+  .figma-thumb[data-accent="teal"] .frame{ border-color:var(--teal); }
+  .figma-thumb[data-accent="amber"] .frame{ border-color:var(--amber); }
+  .figma-thumb[data-accent="brick"] .frame{ border-color:var(--brick); }
+
+  .f1{ width:36%; height:58%; top:18%; left:8%; }
+  .f2{ width:28%; height:42%; top:32%; left:37%; }
+  .f3{ width:20%; height:32%; top:14%; left:68%; }
+
+  .figma-badge{
+    position:absolute; bottom:10px; right:10px; display:flex; align-items:center; gap:5px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.02em; color:var(--text-dim);
+    background:rgba(14,17,22,0.75); border:1px solid var(--border); border-radius:20px; padding:4px 10px 4px 8px;
+  }
+  .figma-thumb[data-accent="teal"] .figma-badge{ border-color:var(--teal); color:var(--teal); }
+  .figma-thumb[data-accent="amber"] .figma-badge{ border-color:var(--amber); color:var(--amber); }
+  .figma-thumb[data-accent="brick"] .figma-badge{ border-color:var(--brick); color:var(--brick); }
+
+  .figma-meta{ padding:20px 22px 22px; }
+  .figma-title{ font-family:var(--mono); font-size:16px; font-weight:700; color:var(--text); margin-bottom:8px; }
+  .figma-desc{ font-size:13.5px; color:var(--text-dim); margin-bottom:14px; max-width:46ch; }
+  .figma-link{ font-family:var(--mono); font-size:12.5px; color:var(--amber); }
+  .figma-card:hover .figma-link{ text-decoration:underline; }
+
   /* ---------- SKILLS ---------- */
   .pkg{
     background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:28px 30px;
@@ -252,6 +292,7 @@
       <li><a href="#about"><span>~/</span>about</a></li>
       <li><a href="#experience"><span>~/</span>experience</a></li>
       <li><a href="#projects"><span>~/</span>projects</a></li>
+      <li><a href="#designs"><span>~/</span>designs</a></li>
       <li><a href="#skills"><span>~/</span>skills</a></li>
       <li><a href="#contact"><span>~/</span>contact</a></li>
     </ul>
@@ -465,10 +506,83 @@
   </div>
 </section>
 
+<!-- ============ DESIGNS (Figma) ============ -->
+<section id="designs">
+  <div class="wrap">
+    <div class="eyebrow">// 04</div>
+    <h2 class="sec-title">designs — figma</h2>
+
+    <div class="designs-grid">
+
+      <!-- EDIT: descriptions inferred from file names — correct any details -->
+      <a class="figma-card" href="https://www.figma.com/design/6Ta2zGwLxjwGr1z0SQl38e/Expense-Tracker?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="teal">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">SpendWise — Expense Tracker</h3>
+          <p class="figma-desc">UI/UX design for a personal expense-tracking app — the design counterpart to the automated test suite in my projects section.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+      <a class="figma-card" href="https://www.figma.com/design/ub2dbONcYE6C2mC9dT94jg/Aqua-Assure-Capstone?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="amber">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">Aqua Assure — Capstone UI/UX</h3>
+          <p class="figma-desc">Interface design for Aqua Assure, my college capstone project — paired with the website build in my projects section.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+      <a class="figma-card" href="https://www.figma.com/design/ZwzKlthigx5koGfsu0Z6NC/Guardian-Watch-UI-UX?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="brick">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">LargaPH — Guardian Watch UI/UX</h3>
+          <p class="figma-desc">UI/UX concept for LargaPH, a safety and monitoring app design.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+      <a class="figma-card" href="https://www.figma.com/design/vEBR1fqkvpuX83iqTWpJ8J/NyaruKash?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="teal">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">NyaruKash</h3>
+          <p class="figma-desc">UI/UX design concept for NyaruKash, a mobile wallet app.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
 <!-- ============ SKILLS ============ -->
 <section id="skills">
   <div class="wrap">
-    <div class="eyebrow">// 04</div>
+    <div class="eyebrow">// 05</div>
     <h2 class="sec-title">skills</h2>
     <div class="pkg">
 <div class="pkg-row"><span class="p">{</span></div>
@@ -484,7 +598,7 @@
 <!-- ============ CONTACT ============ -->
 <section id="contact">
   <div class="wrap">
-    <div class="eyebrow">// 05</div>
+    <div class="eyebrow">// 06</div>
     <h2 class="sec-title">contact</h2>
     <div class="contact-term">
       <p style="color:var(--text-dim); max-width:50ch;">Open to backend and infra-focused roles, or just want to talk about queueing theory. Reach out however's easiest.</p>
