@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>James Anthony Ceniza — Quality Assurance Tester</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwRTExMTYiLz4KICA8cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMjYyRDNBIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSIzMiIgeT0iNDIiIGZvbnQtZmFtaWx5PSJKZXRCcmFpbnMgTW9ubywgdWktbW9ub3NwYWNlLCBtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNFOEEzM0QiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkpDPC90ZXh0Pgo8L3N2Zz4K">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0E1116;
+    --bg-alt: #12161D;
+    --surface: #181D26;
+    --surface-2: #1E2430;
+    --border: #262D3A;
+    --text: #E9E6DE;
+    --text-dim: #8B93A1;
+    --text-faint: #545C6B;
+    --amber: #E8A33D;
+    --amber-dim: #C6852A;
+    --teal: #5FA8A0;
+    --brick: #C4685B;
+
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; border-radius:2px; }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(14,17,22,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:56px; }
+  .nav-brand{ font-family:var(--mono); font-weight:700; font-size:14px; color:var(--amber); letter-spacing:0.02em; }
+  .nav-links{ display:flex; gap:28px; list-style:none; font-family:var(--mono); font-size:13px; }
+  .nav-links a{ color:var(--text-dim); position:relative; padding:4px 0; transition:color .2s; }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:var(--amber);
+    transition:width .25s ease;
+  }
+  .nav-links a:hover::after{ width:100%; }
+  @media (max-width:640px){ .nav-links span{ display:none; } }
+
+  .hamburger{
+    display:none; flex-direction:column; justify-content:center; align-items:flex-end; gap:5px;
+    width:32px; height:32px; background:none; border:none; cursor:pointer; padding:0; margin:0;
+  }
+  .hamburger span{
+    display:block; width:22px; height:2px; background:var(--text-dim); border-radius:1px;
+    transition:transform .25s ease, opacity .2s ease, background .2s ease, width .2s ease;
+  }
+  .hamburger:hover span{ background:var(--amber); }
+  .hamburger.is-open span:nth-child(1){ transform:translateY(7px) rotate(45deg); width:22px; }
+  .hamburger.is-open span:nth-child(2){ opacity:0; }
+  .hamburger.is-open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); width:22px; }
+
+  @media (max-width:720px){
+    .hamburger{ display:flex; }
+    .nav-links{
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:0;
+      background:rgba(14,17,22,0.97); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border);
+      max-height:0; overflow:hidden; opacity:0;
+      transition:max-height .32s ease, opacity .25s ease;
+      padding:0 28px;
+    }
+    .nav-links.is-open{ max-height:320px; opacity:1; padding:10px 28px 18px; }
+    .nav-links li{ width:100%; }
+    .nav-links a{ display:block; padding:14px 2px; border-bottom:1px solid var(--border); font-size:14px; }
+    .nav-links li:last-child a{ border-bottom:none; }
+    .nav-links a::after{ display:none; }
+    .nav-links span{ display:inline; color:var(--text-faint); }
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    min-height:100vh; display:flex; align-items:center;
+    padding-top:80px; padding-bottom:60px;
+  }
+  .terminal{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    overflow:hidden; box-shadow:0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .terminal-bar{
+    display:flex; align-items:center; gap:8px; padding:12px 16px;
+    background:var(--surface-2); border-bottom:1px solid var(--border);
+  }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.r{ background:#C4685B; } .dot.y{ background:#E8A33D; } .dot.g{ background:#5FA8A0; }
+  .terminal-title{ margin-left:8px; font-family:var(--mono); font-size:12px; color:var(--text-faint); }
+  .terminal-body{ padding:32px 28px 36px; font-family:var(--mono); }
+  .term-line{ margin-bottom:14px; font-size:15px; }
+  .term-line .prompt{ color:var(--teal); }
+  .term-line .out{ color:var(--text-dim); }
+  #typed-name{ color:var(--amber); font-weight:700; }
+  .cursor{ display:inline-block; width:9px; height:18px; background:var(--amber); margin-left:2px; vertical-align:-3px; animation:blink 1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  h1.role{
+    font-family:var(--mono); font-size:clamp(28px, 5vw, 44px); font-weight:700; line-height:1.15;
+    margin-top:28px; color:var(--text);
+  }
+  h1.role span{ color:var(--amber); }
+  .tagline{ margin-top:14px; max-width:52ch; color:var(--text-dim); font-size:16px; }
+
+  .hero-cta{ margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono); font-size:13px; padding:11px 18px; border-radius:6px;
+    border:1px solid var(--border); transition:all .2s ease; display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn-primary{ background:var(--amber); color:#141414; border-color:var(--amber); font-weight:600; }
+  .btn-primary:hover{ background:var(--amber-dim); }
+  .btn-ghost{ color:var(--text-dim); }
+  .btn-ghost:hover{ color:var(--text); border-color:var(--text-faint); }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding:100px 0; scroll-margin-top:64px; }
+  .eyebrow{ font-family:var(--mono); font-size:12px; color:var(--teal); letter-spacing:0.08em; text-transform:uppercase; }
+  .sec-title{ font-family:var(--mono); font-size:clamp(24px,3.4vw,32px); font-weight:700; margin-top:10px; margin-bottom:48px; }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns:140px 1fr; gap:40px; align-items:start; }
+  .avatar{
+    width:140px; height:140px; border-radius:10px; background:
+      linear-gradient(135deg, var(--surface-2), var(--surface));
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:40px; font-weight:700; color:var(--amber);
+  }
+  .about-body p{ color:var(--text-dim); margin-bottom:16px; max-width:62ch; }
+  .about-body strong{ color:var(--text); font-weight:600; }
+  @media (max-width:640px){ .about-grid{ grid-template-columns:1fr; } .avatar{ width:72px; height:72px; font-size:22px; } }
+
+  .credentials{ display:flex; flex-direction:column; gap:8px; margin-top:22px; padding-top:20px; border-top:1px solid var(--border); }
+  .credential{ font-family:var(--mono); font-size:12.5px; color:var(--text-dim); }
+  .credential-label{ color:var(--teal); margin-right:8px; }
+  .credential-label::before{ content:'--'; }
+
+  /* ---------- EXPERIENCE ---------- */
+  .career-terminal .terminal-body{ padding:28px 28px 12px; }
+  .log-cmd{ font-family:var(--mono); font-size:14px; color:var(--teal); margin-bottom:24px; }
+  .log-cmd .prompt{ color:var(--teal); }
+  .log-entry{ margin-bottom:30px; padding-bottom:26px; border-bottom:1px solid var(--border); }
+  .log-entry:last-child{ margin-bottom:8px; padding-bottom:0; border-bottom:none; }
+  .log-meta{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; font-family:var(--mono); }
+  .log-date{ color:var(--text-faint); font-size:12px; }
+  .log-role{ color:var(--amber); font-weight:600; font-size:14.5px; }
+  .log-at{ color:var(--text-faint); font-size:13px; }
+  .log-company{ color:var(--text); font-size:14px; }
+  .log-loc{ color:var(--text-faint); font-size:12px; }
+  .log-bullets{ list-style:none; margin-top:12px; display:flex; flex-direction:column; gap:7px; }
+  .log-bullets li{ font-family:var(--sans); font-size:14px; color:var(--text-dim); padding-left:18px; position:relative; }
+  .log-bullets li::before{ content:'›'; position:absolute; left:0; color:var(--teal); font-family:var(--mono); }
+
+  /* ---------- PROJECTS / COMMIT LOG ---------- */
+  .timeline{ position:relative; padding-left:44px; }
+  .timeline::before{
+    content:''; position:absolute; left:14px; top:6px; bottom:6px; width:2px; background:var(--border);
+  }
+  .commit{
+    position:relative; margin-bottom:56px; opacity:0; transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .commit.is-visible{ opacity:1; transform:translateY(0); }
+  .commit::before{
+    content:''; position:absolute; left:-38px; top:6px; width:12px; height:12px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--border); transition:border-color .4s ease, background .4s ease;
+  }
+  .commit.is-visible::before{ border-color:var(--amber); background:var(--amber); }
+
+  .commit-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .commit-hash{ font-family:var(--mono); font-size:12px; color:var(--text-faint); }
+  .commit-title{ font-family:var(--mono); font-size:17px; font-weight:600; color:var(--text); }
+  .commit-title .kind{ color:var(--teal); }
+
+  .diffstat{ font-family:var(--mono); font-size:12px; margin-top:6px; color:var(--text-faint); }
+  .diffstat .add{ color:var(--teal); }
+  .diffstat .rem{ color:var(--brick); }
+
+  .commit-desc{ margin-top:12px; color:var(--text-dim); max-width:60ch; font-size:14.5px; }
+
+  .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .tag{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11.5px; color:var(--text-dim); border:1px solid var(--border); padding:4px 9px; border-radius:20px; }
+  .tag .chip{ width:7px; height:7px; border-radius:50%; }
+
+  .commit-links{ margin-top:16px; display:flex; gap:18px; }
+  .commit-links a{ font-family:var(--mono); font-size:12.5px; color:var(--amber); border-bottom:1px solid transparent; }
+  .commit-links a:hover{ border-color:var(--amber); }
+
+  /* ---------- DESIGNS (Figma showcase) ---------- */
+  .designs-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+  @media (max-width:640px){ .designs-grid{ grid-template-columns:1fr; } }
+
+  .figma-card{
+    display:block; border:1px solid var(--border); border-radius:12px; overflow:hidden;
+    background:var(--surface); transition:border-color .25s ease, transform .25s ease;
+  }
+  .figma-card:hover{ border-color:var(--amber-dim); transform:translateY(-3px); }
+
+  .figma-thumb{ position:relative; aspect-ratio:16/10; background:linear-gradient(160deg, var(--surface-2), var(--bg-alt)); overflow:hidden; }
+  .figma-grid{
+    position:absolute; inset:0; opacity:.35;
+    background-image:linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:22px 22px;
+  }
+  .frame{ position:absolute; border-radius:5px; border-width:1.5px; border-style:solid; background:rgba(255,255,255,0.025); }
+  .figma-thumb[data-accent="teal"] .frame{ border-color:var(--teal); }
+  .figma-thumb[data-accent="amber"] .frame{ border-color:var(--amber); }
+  .figma-thumb[data-accent="brick"] .frame{ border-color:var(--brick); }
+
+  .f1{ width:36%; height:58%; top:18%; left:8%; }
+  .f2{ width:28%; height:42%; top:32%; left:37%; }
+  .f3{ width:20%; height:32%; top:14%; left:68%; }
+
+  .figma-badge{
+    position:absolute; bottom:10px; right:10px; display:flex; align-items:center; gap:5px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.02em; color:var(--text-dim);
+    background:rgba(14,17,22,0.75); border:1px solid var(--border); border-radius:20px; padding:4px 10px 4px 8px;
+  }
+  .figma-thumb[data-accent="teal"] .figma-badge{ border-color:var(--teal); color:var(--teal); }
+  .figma-thumb[data-accent="amber"] .figma-badge{ border-color:var(--amber); color:var(--amber); }
+  .figma-thumb[data-accent="brick"] .figma-badge{ border-color:var(--brick); color:var(--brick); }
+
+  .figma-meta{ padding:20px 22px 22px; }
+  .figma-title{ font-family:var(--mono); font-size:16px; font-weight:700; color:var(--text); margin-bottom:8px; }
+  .figma-desc{ font-size:13.5px; color:var(--text-dim); margin-bottom:14px; max-width:46ch; }
+  .figma-link{ font-family:var(--mono); font-size:12.5px; color:var(--amber); }
+  .figma-card:hover .figma-link{ text-decoration:underline; }
+
+  /* ---------- SKILLS ---------- */
+  .pkg{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:28px 30px;
+    font-family:var(--mono); font-size:13.5px; overflow-x:auto;
+  }
+  .pkg .k{ color:var(--teal); }
+  .pkg .s{ color:var(--amber); }
+  .pkg .p{ color:var(--text-faint); }
+  .pkg-row{ margin-bottom:4px; white-space:pre; }
+  .pkg-indent{ padding-left:24px; }
+  .pkg-indent2{ padding-left:48px; }
+
+  /* ---------- CONTACT ---------- */
+  .contact-term{ max-width:560px; }
+  .contact-links{ margin-top:26px; display:flex; flex-direction:column; gap:14px; }
+  .contact-row{ display:flex; align-items:center; gap:12px; font-family:var(--mono); font-size:14.5px; color:var(--text-dim); transition:color .2s; }
+  .contact-row:hover{ color:var(--amber); }
+  .contact-row svg{ width:16px; height:16px; flex-shrink:0; }
+  .flag{ color:var(--text-faint); }
+
+  footer{ border-top:1px solid var(--border); padding:28px 0 60px; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  .blame{ font-family:var(--mono); font-size:11.5px; color:var(--text-faint); }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-brand">James.C</div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about"><span>~/</span>about</a></li>
+      <li><a href="#experience"><span>~/</span>experience</a></li>
+      <li><a href="#projects"><span>~/</span>projects</a></li>
+      <li><a href="#designs"><span>~/</span>designs</a></li>
+      <li><a href="#skills"><span>~/</span>skills</a></li>
+      <li><a href="#contact"><span>~/</span>contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap" style="width:100%;">
+    <div class="terminal" style="max-width:600px;">
+      <div class="terminal-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="terminal-title">sam@portfolio: ~</span>
+      </div>
+      <div class="terminal-body">
+        <div class="term-line"><span class="prompt">$</span> whoami</div>
+        <div class="term-line"><span class="out">&gt; </span><span id="typed-name"></span><span class="cursor"></span></div>
+      </div>
+    </div>
+
+    <!-- EDIT: swap name/role/tagline -->
+    <h1 class="role">Quality Assurance Tester,<br><span>breaking things before your users do.</span></h1>
+    <p class="tagline">I build the parts of the stack most people never see — queues, APIs, and the infrastructure that keeps them from falling over at 3am. Based in the Pacific Northwest, shipping since 2018.</p>
+
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">view --projects</a>
+      <a href="Resume_James_Anthony_Ceniza.pdf" download class="btn btn-ghost">download --resume</a>
+      <a href="#contact" class="btn btn-ghost">contact --me</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">// 01</div>
+    <h2 class="sec-title">about</h2>
+    <div class="about-grid">
+      <div class="avatar">JC</div>
+      <div class="about-body">
+        <p><strong>I'm a Bachelor of Science in Information Technology graduate and a QA Test Engineer</strong> with experience in software and game testing. I enjoy finding bugs, improving user experiences, and ensuring products meet quality standards.</p>
+        <p>I also have experience in IT support, system monitoring, web development, and database management.</p>
+        <p>Outside of work, I'm passionate about gaming, PC hardware, and creating gaming content.</p>
+        <div class="credentials">
+          <span class="credential"><span class="credential-label">degree</span> BS Information Technology — University of Cebu Banilad, 2021–2025</span>
+          <span class="credential"><span class="credential-label">honors</span> Dean's List, 1st &amp; 2nd Sem, 4th Year</span>
+          <span class="credential"><span class="credential-label">program</span> Alliance Jumpstart Program</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow">// 02</div>
+    <h2 class="sec-title">experience</h2>
+
+    <div class="terminal career-terminal">
+      <div class="terminal-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="terminal-title">james@career: ~</span>
+      </div>
+      <div class="terminal-body">
+        <div class="log-cmd"><span class="prompt">$</span> cat career.log</div>
+
+        <div class="log-entry">
+          <div class="log-meta">
+            <span class="log-date">[Sep 2025 — Present]</span>
+            <span class="log-role">QA Test Engineer</span>
+            <span class="log-at">@</span>
+            <span class="log-company">MegaCat Studios</span>
+            <span class="log-loc">· Remote</span>
+          </div>
+          <ul class="log-bullets">
+            <li>Developed and executed test plans, scripts, and use cases for gaming applications</li>
+            <li>Conducted functional and regression testing to identify and verify defects</li>
+            <li>Collaborated with developers, product managers, and QA teams to resolve issues</li>
+            <li>Documented test results and provided gameplay and UX feedback</li>
+            <li>Participated in stand-ups and communicated testing progress and findings</li>
+          </ul>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-meta">
+            <span class="log-date">[May 2025]</span>
+            <span class="log-role">CCS Technical Support</span>
+            <span class="log-at">@</span>
+            <span class="log-company">COMELEC</span>
+            <span class="log-loc">· Cebu City</span>
+          </div>
+          <ul class="log-bullets">
+            <li>Provided technical support in a fast-paced environment</li>
+            <li>Troubleshot issues using critical thinking and problem-solving skills</li>
+            <li>Worked effectively both independently and as part of a team</li>
+          </ul>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-meta">
+            <span class="log-date">[Feb 2025 — May 2025]</span>
+            <span class="log-role">IT Intern</span>
+            <span class="log-at">@</span>
+            <span class="log-company">Vismotor Corporation</span>
+            <span class="log-loc">· Cebu City</span>
+          </div>
+          <ul class="log-bullets">
+            <li>Provided technical support and troubleshooting for hardware and software issues</li>
+            <li>Assisted with system maintenance, software deployment, and user documentation</li>
+            <li>Collaborated with the IT team to improve support processes and system efficiency</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow">// 03</div>
+    <h2 class="sec-title">projects — recent commits</h2>
+
+    <div class="timeline">
+
+      <!-- EDIT: descriptions below are inferred from repo names — correct any details -->
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-hash">private</span>
+          <span class="commit-title"><span class="kind">feat:</span> Aqua Assure — capstone project website</span>
+        </div>
+        <div class="diffstat">Private repo · ★ 1 · updated Jul 25, 2025</div>
+        <p class="commit-desc">The website for Aqua Assure, my college capstone project — built and maintained with my team from planning through QA and deployment.</p>
+        <div class="tags">
+          <span class="tag"><span class="chip" style="background:#f1e05a"></span>JavaScript</span>
+          <span class="tag"><span class="chip" style="background:var(--amber)"></span>Capstone</span>
+        </div>
+      </div>
+
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-hash">private</span>
+          <span class="commit-title"><span class="kind">feat:</span> IT asset monitoring tool</span>
+        </div>
+        <div class="diffstat">Private repo · updated Apr 22, 2025</div>
+        <p class="commit-desc">A tool for tracking and monitoring IT assets — built to bring visibility into hardware/software inventory and status, drawing on my IT support background.</p>
+        <div class="tags">
+          <span class="tag"><span class="chip" style="background:#f1e05a"></span>JavaScript</span>
+          <span class="tag"><span class="chip" style="background:var(--teal)"></span>IT Support</span>
+        </div>
+      </div>
+
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-hash">private</span>
+          <span class="commit-title"><span class="kind">feat:</span> HR recruitment &amp; onboarding system</span>
+        </div>
+        <div class="diffstat">Private repo · updated Apr 16, 2025</div>
+        <p class="commit-desc">A system supporting the recruitment and onboarding workflow — from candidate tracking through to new-hire setup.</p>
+        <div class="tags">
+          <span class="tag"><span class="chip" style="background:#f1e05a"></span>JavaScript</span>
+          <span class="tag"><span class="chip" style="background:var(--amber-dim)"></span>Web App</span>
+        </div>
+      </div>
+
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-hash">public</span>
+          <span class="commit-title"><span class="kind">test:</span> automated test suite for SpendWise</span>
+        </div>
+        <div class="diffstat">Public repo · updated Dec 7, 2024</div>
+        <p class="commit-desc">An automated testing project built around SpendWise, a personal-finance app — functional test cases and regression coverage as part of my QA practice.</p>
+        <div class="tags">
+          <span class="tag"><span class="chip" style="background:#178600"></span>C#</span>
+          <span class="tag"><span class="chip" style="background:var(--teal)"></span>Test Automation</span>
+        </div>
+        <div class="commit-links"><a href="https://github.com/JamesCeniz/SpendWise-TestAutomation" target="_blank" rel="noopener">source →</a></div>
+      </div>
+
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-hash">public</span>
+          <span class="commit-title"><span class="kind">feat:</span> ASI Jumpstart 2024 — Group 6 project</span>
+        </div>
+        <div class="diffstat">Public repo · forked from Lemwe1/ASIJumpstart2024-Group-6 · updated Nov 16, 2024</div>
+        <p class="commit-desc">A group project built during the ASI Jumpstart 2024 program, developed collaboratively with my teammates.</p>
+        <div class="tags">
+          <span class="tag"><span class="chip" style="background:#178600"></span>C#</span>
+          <span class="tag"><span class="chip" style="background:var(--text-faint)"></span>Group Project</span>
+        </div>
+        <div class="commit-links"><a href="https://github.com/JamesCeniz/ASIJumpstart2024-Group-6" target="_blank" rel="noopener">source →</a></div>
+      </div>
+
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-hash">public</span>
+          <span class="commit-title"><span class="kind">feat:</span> IT SysArch 32 — store system</span>
+        </div>
+        <div class="diffstat">Public repo · updated Jun 18, 2024</div>
+        <p class="commit-desc">A systems architecture coursework project — designing and building a store system for IT SysArch 32.</p>
+        <div class="tags">
+          <span class="tag"><span class="chip" style="background:#e34c26"></span>HTML</span>
+          <span class="tag"><span class="chip" style="background:var(--text-faint)"></span>Coursework</span>
+        </div>
+        <div class="commit-links"><a href="https://github.com/JamesCeniz/it-sysarch32-store-ceniza" target="_blank" rel="noopener">source →</a></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESIGNS (Figma) ============ -->
+<section id="designs">
+  <div class="wrap">
+    <div class="eyebrow">// 04</div>
+    <h2 class="sec-title">designs — figma</h2>
+
+    <div class="designs-grid">
+
+      <!-- EDIT: descriptions inferred from file names — correct any details -->
+      <a class="figma-card" href="https://www.figma.com/design/6Ta2zGwLxjwGr1z0SQl38e/Expense-Tracker?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="teal">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">SpendWise — Expense Tracker</h3>
+          <p class="figma-desc">UI/UX design for a personal expense-tracking app — the design counterpart to the automated test suite in my projects section.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+      <a class="figma-card" href="https://www.figma.com/design/ub2dbONcYE6C2mC9dT94jg/Aqua-Assure-Capstone?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="amber">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">Aqua Assure — Capstone UI/UX</h3>
+          <p class="figma-desc">Interface design for Aqua Assure, my college capstone project — paired with the website build in my projects section.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+      <a class="figma-card" href="https://www.figma.com/design/ZwzKlthigx5koGfsu0Z6NC/Guardian-Watch-UI-UX?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="brick">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">LargaPH — Guardian Watch UI/UX</h3>
+          <p class="figma-desc">UI/UX concept for LargaPH, a safety and monitoring app design.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+      <a class="figma-card" href="https://www.figma.com/design/vEBR1fqkvpuX83iqTWpJ8J/NyaruKash?node-id=0-1" target="_blank" rel="noopener">
+        <div class="figma-thumb" data-accent="teal">
+          <div class="figma-grid"></div>
+          <div class="frame f1"></div>
+          <div class="frame f2"></div>
+          <div class="frame f3"></div>
+          <div class="figma-badge">Figma</div>
+        </div>
+        <div class="figma-meta">
+          <h3 class="figma-title">NyaruKash</h3>
+          <p class="figma-desc">UI/UX design concept for NyaruKash, a mobile wallet app.</p>
+          <span class="figma-link">View in Figma →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow">// 05</div>
+    <h2 class="sec-title">skills</h2>
+    <div class="pkg">
+<div class="pkg-row"><span class="p">{</span></div>
+<div class="pkg-row pkg-indent"><span class="k">"testing"</span><span class="p">: [</span><span class="s">"Manual Testing"</span><span class="p">, </span><span class="s">"Regression Testing"</span><span class="p">, </span><span class="s">"Test Case Design"</span><span class="p">, </span><span class="s">"Functional Testing"</span><span class="p">],</span></div>
+<div class="pkg-row pkg-indent"><span class="k">"tools"</span><span class="p">: [</span><span class="s">"Jira"</span><span class="p">, </span><span class="s">"Google Workspace"</span><span class="p">],</span></div>
+<div class="pkg-row pkg-indent"><span class="k">"itSupport"</span><span class="p">: [</span><span class="s">"Troubleshooting"</span><span class="p">, </span><span class="s">"System Monitoring"</span><span class="p">, </span><span class="s">"Software Deployment"</span><span class="p">, </span><span class="s">"User Documentation"</span><span class="p">],</span></div>
+<div class="pkg-row pkg-indent"><span class="k">"devExposure"</span><span class="p">: [</span><span class="s">"JavaScript"</span><span class="p">, </span><span class="s">"C#"</span><span class="p">, </span><span class="s">"HTML"</span><span class="p">, </span><span class="s">"Database Management"</span><span class="p">]</span></div>
+<div class="pkg-row"><span class="p">}</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="eyebrow">// 06</div>
+    <h2 class="sec-title">contact</h2>
+    <div class="contact-term">
+      <p style="color:var(--text-dim); max-width:50ch;">Open to backend and infra-focused roles, or just want to talk about queueing theory. Reach out however's easiest.</p>
+      <div class="contact-links">
+        <a class="contact-row" href="mailto:jamesniza1@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          <span class="flag">--email</span> jamesniza1@gmail.com
+        </a>
+        <a class="contact-row" href="https://github.com/JamesCeniz" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+          <span class="flag">--github</span> github.com/JamesCeniz
+        </a>
+        <a class="contact-row" href="https://www.linkedin.com/in/james-anthony-ceniza-aa7389328/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"/></svg>
+          <span class="flag">--linkedin</span> linkedin.com/in/james-anthony-ceniza
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="blame">// last commit 2026-08-20 · built with intent, not a template</span>
+    <span class="blame">James.C</span>
+  </div>
+</footer>
+
+<script>
+  // Mobile hamburger menu
+  (function(){
+    var btn = document.getElementById('hamburger');
+    var menu = document.getElementById('nav-links');
+    if(!btn || !menu) return;
+
+    function closeMenu(){
+      btn.classList.remove('is-open');
+      menu.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    function toggleMenu(){
+      var open = menu.classList.toggle('is-open');
+      btn.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', function(e){
+      if(!menu.classList.contains('is-open')) return;
+      if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
+    });
+
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeMenu();
+    });
+
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 720) closeMenu();
+    });
+  })();
+
+  // In-page anchor navigation handled via JS (avoids native link navigation,
+  // which some embedded/sandboxed viewers flag as "external" even for #anchors)
+  (function(){
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var navEl = document.querySelector('nav');
+    document.querySelectorAll('a[href^="#"]').forEach(function(link){
+      link.addEventListener('click', function(e){
+        var id = this.getAttribute('href').slice(1);
+        var target = document.getElementById(id);
+        if(!target) return;
+        e.preventDefault();
+        var navHeight = navEl ? navEl.offsetHeight : 0;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 8;
+        window.scrollTo({ top: top, behavior: reduced ? 'auto' : 'smooth' });
+      });
+    });
+  })();
+  // Typed "whoami" effect in hero terminal
+  (function(){
+    var el = document.getElementById('typed-name');
+    var text = "James Anthony Ceniza — Quality Assurance Tester"; // EDIT: your name/role
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced){ el.textContent = text; return; }
+    var i = 0;
+    function tick(){
+      if(i <= text.length){
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(tick, 34);
+      }
+    }
+    tick();
+  })();
+
+  // Commit timeline reveal on scroll
+  (function(){
+    var items = document.querySelectorAll('.commit');
+    if(!('IntersectionObserver' in window)){
+      items.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -60px 0px' });
+    items.forEach(function(el){ io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
